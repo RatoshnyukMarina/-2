@@ -11,6 +11,23 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
+
+
+    @staticmethod
+    def make_unique_username(username):
+        if User.query.filter_by(username=username).first() == None:
+            return username
+        version = 2
+        while True:
+            new_username = username + str(version)
+            if User.query.filter_by(username=new_username).first() == None:
+                break
+            version += 1
+        return new_username
+
+
+
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
