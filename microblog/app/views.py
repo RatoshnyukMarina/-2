@@ -1,4 +1,6 @@
 from forms import LoginForm, EditForm
+from flask import render_template
+from app import app, db
 
 @app.route('/user/<username>')
 @login_required
@@ -27,4 +29,11 @@ def edit():
     return render_template('edit.html',
         form = form)
 
-
+if user is None:
+        username = resp.username
+        if username is None or username == "":
+            username = resp.email.split('@')[0]
+        username = User.make_unique_username(username)
+        user = User(username = username, email = resp.email, role = ROLE_USER)
+        db.session.add(user)
+        db.session.commit()
