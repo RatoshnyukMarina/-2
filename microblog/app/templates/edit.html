@@ -15,6 +15,13 @@
             <td>{{form.about_me(cols = 32, rows = 4)}}</td>
         </tr>
         <tr>
+            <td>Your nickname:</td>
+            <td>
+            {{form.username(size = 24)}}
+            {% for error in form.errors.username %}
+            <br><span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+            </td>
             <td></td>
             <td><input type="submit" value="Save Changes"></td>
         </tr>
