@@ -15,7 +15,7 @@ def user(username):
 @app.route('/edit', methods = ['GET', 'POST'])
 @login_required
 def edit():
-    form = EditForm()
+    form = EditForm(current_user.nickname)
     if form.validate_on_submit():
         g.user.nickname = form.username.data
         g.user.about_me = form.about_me.data
