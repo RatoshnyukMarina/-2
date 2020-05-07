@@ -8,6 +8,10 @@
 
     <h1>Tickets</h1>
     {% for ticket in tickets %}
+      <form method="POST" action="./delete">
+        <input type="hidden" value="{{ticket.place}}" name="place">
+        <input type="submit" value="Delete">
+      </form>
       <p>{{ticket.place}}</p>
       <form method="POST" action="./update">
         <input type="hidden" value="{{ticket.place}}" name="oldticket">
