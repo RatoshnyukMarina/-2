@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for
+import os
+from flask import render_template, flash, redirect, url_for, request
 from app import app, db
 from app.forms import LoginForm, EditForm
 from flask_login import current_user, login_user, login_required, logout_user
 from app.models import User
 from werkzeug.urls import url_parse
+from flask import Flask
+from flask import render_template
+from flask import redirect
+
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
@@ -25,24 +30,28 @@ def login():
 
 @app.route('/index')
 def index():
+    if request.form:
+        ticket = Ticket(place=request.form.get("place"))
+        db.session.add(ticket)
+        db.session.commit()
     user = current_user
-    #user = {'username': 'Эльдар Рязанов'}
+    user = {'username': 'Name'}
     posts = [
         {
             'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
+            'body': 'Moskow'
         },
         {
             'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
+            'body': 'Chelyabinsk'
         },
         {
-            'author': {'username': 'Ипполит'},
-            'body': 'Какая гадость эта ваша заливная рыба!!'
+            'author': {'username': 'Blok'},
+            'body': 'Petersburg'
         }
     ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
 
+    return render_template('index.html', title='Home', user=user, posts=posts)
 
 
 @app.route('/logout')
@@ -57,8 +66,8 @@ def logout():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
+        {'author': user, 'body': 'City1'},
+        {'author': user, 'body': 'City2'}
     ]
     return render_template('user.html', user=user, posts=posts)
 
@@ -78,3 +87,9 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
+
+
+@app.route('/ticket/<date>/<place>')
+def show_ticket(place, date):
+    ticket = Ticket.query.filter_by(place=place, date=date).first_or_404()
+    return render_template('show_ticket.html', ticket=ticket)
