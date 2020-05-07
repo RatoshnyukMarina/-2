@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <title>{{ ticket.date }} :: {{ ticket.place }}</title>
+    <body>
+    <dl>
+     <dt> Место отправления
+     <dd> {{ ticket.place }}
+     <dt> Дата
+     <dd> {{ ticket.date }}
+     </dl>
+    </body>
+{% endblock %}
