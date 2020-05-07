@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+  <body>
+    <h1>Add book</h1>
+    <form method="POST" action="/">
+        <input type="text" name="place">
+        <input type="submit" value="Add">
+    </form>
+
+    <h1>Tickets</h1>
+    {% for ticket in tickets %}
+      <p>{{ticket.place}}</p>
+      <form method="POST" action="./update">
+        <input type="hidden" value="{{ticket.place}}" name="oldticket">
+        <input type="text" value="{{ticket.place}}" name="newplace">
+        <input type="submit" value="Update">
+      </form>
+    {% endfor %}
+  </body>
+{% endblock %}
