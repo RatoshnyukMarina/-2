@@ -53,6 +53,15 @@ def index():
 
     return render_template('index.html', title='Home', user=user, posts=posts)
 
+@app.route("/update", methods=["POST"])
+def update():
+    newplace = request.form.get("newplace")
+    oldplace = request.form.get("oldplace")
+    ticket = Ticket.query.filter_by(place=oldplace).first()
+    ticket.place = newplace
+    db.session.commit()
+    return redirect("/")
+
 
 @app.route('/logout')
 def logout():
