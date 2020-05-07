@@ -28,3 +28,12 @@ def home():
         db.session.add(ticket)
         tickets = Ticket.query.all()
     return render_template("home.html", tickets=tickets)
+
+@app.route("/update", methods=["POST"])
+def update():
+    newplace = request.form.get("newplace")
+    oldplace = request.form.get("oldplace")
+    ticket = Ticket.query.filter_by(place=oldplace).first()
+    ticket.place = newplace
+    db.session.commit()
+    return redirect("/")
