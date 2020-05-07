@@ -1,5 +1,7 @@
 
 from flask import Flask
+from flask import render_template
+from flask import request
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -8,6 +10,11 @@ import logging
 from logging.handlers import SMTPHandler
 from logging.handlers import RotatingFileHandler
 import os
+from flask import redirect
+
+
+project_dir = os.path.dirname(os.path.abspath(__file__))
+database_file = "sqlite:///{}".format(os.path.join(project_dir, "ticketdatabase.db"))
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -15,9 +22,15 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
+app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 
+db = SQLAlchemy(app)
 
+class Ticket(db.Model):
+    place = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
 
+    def __repr__(self):
+        return "<Title: {}>".format(self.place)
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
