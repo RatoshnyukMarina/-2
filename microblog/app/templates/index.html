@@ -9,18 +9,28 @@
     </form>
 
     <h1>Tickets</h1>
+    <table>
     {% for ticket in tickets %}
-      <p>{{ticket.place}}</p>
-      <form method="POST" action="./delete">
-        <input type="hidden" value="{{ticket.place}}" name="place">
-        <input type="submit" value="Delete">
-      </form>
-      <form method="POST" action="./update">
-        <input type="hidden" value="{{ticket.place}}" name="oldticket">
-        <input type="text" value="{{ticket.place}}" name="newplace">
-        <input type="submit" value="Update">
-      </form>
+      <tr>
+          <td>
+            {{ticket.place}}
+          </td>
+          <td>
+            <form method="POST" action="./update" style="display: inline">
+              <input type="hidden" value="{{ticket.place}}" name="oldplace">
+              <input type="text" value="{{ticket.place}}" name="newplace">
+              <input type="submit" value="Update">
+            </form>
+          </td>
+          <td>
+            <form method="POST" action="./delete" style="display: inline">
+              <input type="hidden" value="{{ticket.place}}" name="place">
+              <input type="submit" value="Delete">
+            </form>
+          </td>
+        </tr>
     {% endfor %}
+    </table>
     {% for post in posts %}
     <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
     {% endfor %}
