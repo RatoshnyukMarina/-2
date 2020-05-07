@@ -63,6 +63,15 @@ def update():
     return redirect("/")
 
 
+@app.route("/delete", methods=["POST"])
+def delete():
+    place = request.form.get("place")
+    ticket = Ticket.query.filter_by(place=place).first()
+    db.session.delete(ticket)
+    db.session.commit()
+    return redirect("/")
+
+
 @app.route('/logout')
 def logout():
     logout_user()
