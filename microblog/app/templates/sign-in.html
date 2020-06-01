@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Вход</title>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+  </head>
+<body class="text-center">
+
+    <form class="form-signin" method="POST">
+        {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+  <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+  <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите в систему</h1>
+  <label for="inputEmail" class="sr-only">Email address</label>
+  <input type="email" id="inputEmail" class="form-control" name="login" placeholder="Email address" required autofocus>
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+    <label>
+      <input type="checkbox" value="remember-me"> Remember me
+    </label>
+   <a href="{{ url_for('registration') }}" class="btn btn-secondary   " role="button" aria-pressed="true">Регистрация</a>
+  <button class="btn  btn-primary registration_btn" type="submit">Войти</button>
+    <a href="/" class="btn btn-secondary  " role="button" aria-pressed="true">Главная</a>
+    <a href="#" class="btn btn-secondary  " role="button" aria-pressed="true">Забыл пароль</a>
+</form>
+</body>
+</html>
