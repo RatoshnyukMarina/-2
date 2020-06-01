@@ -29,3 +29,57 @@
         {% block content %}{% endblock %}
     </body>
 </html>
+
+
+{% extends 'bootstrap/base.html' %}
+<html>
+    <head>
+        <style>
+          .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+          }
+
+          @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+              font-size: 3.5rem;
+            }
+          }
+        </style>
+    </head>
+    
+<body>
+{% block header %}<header>
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+  <a class="navbar-brand" href="{{ url_for('hello_world') }}">MARINA</a>
+  
+
+  <div class="collapse navbar-collapse" id="navbarsExample02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url_for('hello_world') }}">Главная <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('schedule') }}">Расписание</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('registration') }}">Регистрация</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('login') }}">Вход</a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+</header>{% endblock %}
+
+
+    {% block body %}{% endblock %}
+</body>
+
+</html>
