@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}
+Расписание
+{% endblock %}
+{% if current_user.is_authenticated %}
+    {% block header %}<header>
+    <nav class="navbar navbar-expand navbar-dark bg-dark">
+  <a class="navbar-brand" href="{{ url_for('hello_world') }}">MARINA</a>
+
+  <div class="collapse navbar-collapse" id="navbarsExample02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url_for('hello_world') }}">Главная <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('schedule') }}">Расписание</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('history') }}">История</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">Выход</a>
+      </li>
+
+    </ul>
+
+    <form class="form-inline my-2 my-md-0">
+      <input class="form-control" type="text" placeholder="Search">
+    </form>
+  </div>
+</nav>
+</header>{% endblock %}
+{% endif %}
+{% block body %}
+<div class="container">
+{% if schedules %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Дата</th>
+      <th scope="col">Город Вылета</th>
+      <th scope="col">Город Прилета</th>
+      <th scope="col">Цена</th>
+      <th scope="col">Забронировать</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+  {% for i in schedules %}
+
+    <tr>
+
+      <th scope="col" name="date">{{ i.date }}</th>
+      <th scope="col" name="from_city">{{ i.from_city}}</th>
+      <th scope="col" name="to_city">{{ i.to_city }}</th>
+      <th scope="col" name="price">{{ i.price }} руб</th>
+      <th scope="col"><a href="/schedule/{{ i.id }}" class="btn  btn-primary registration_btn" type="submit">Добавить</a></th>
+
+    </tr>
+
+    {% endfor %}
+
+  </tbody>
+
+</table>
+{% endif %}
+{% if not schedules %}
+    <div>
+    нет билетов
+    </div>
+{% endif %}
+{% endblock %}
