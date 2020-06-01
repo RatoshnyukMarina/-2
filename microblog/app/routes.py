@@ -113,4 +113,144 @@ def edit_profile():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
      
-     
+    
+    
+ 
+
+
+    
+from flask import render_template, request, redirect, flash, url_for
+from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from sweater import app, db
+from sweater.models import User, hisoriTickets, Tickets
+
+
+@app.route('/')
+def hello_world():
+    return render_template('index.html')
+
+
+@app.route('/history')
+@login_required
+def history():
+    user_id = current_user.get_id()
+
+    try:
+        user_data = hisoriTickets.query.filter_by(login_id=user_id).order_by(hisoriTickets.date.desc()).all()
+    except:
+        user_data = False
+    return render_template('history.html', user_data=user_data)
+
+@app.route('/history/<int:id>')
+@login_required
+def history_del(id):
+
+    data = hisoriTickets.query.get_or_404(id)
+    try:
+
+        db.session.delete(data)
+        db.session.commit()
+    except:
+        return "Ошибка при удалении"
+    return redirect(url_for('history'))
+
+@app.route('/sign_up', methods=['GET', 'POST'])
+def login_page():
+    if current_user.is_authenticated:
+        return redirect(url_for('hello_world'))
+    login = request.form.get('login')
+    password = request.form.get('password')
+
+    if login and password:
+        user = User.query.filter_by(login=login).first()
+
+        if user and check_password_hash(user.password, password) or user and user.password == password:
+            login_user(user)
+            user_id = current_user.get_id()
+            if user_id == '1':
+                return redirect('admin')
+            next_page = request.args.get('next')
+            if next_page is None:
+                next_page = url_for('hello_world')
+            return redirect(next_page)
+        else:
+            flash('Логин или пароль неверны')
+    else:
+        flash('Пожалуйста, заполните поля логин и пароль')
+    return render_template('sign-in.html')
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    name = request.form.get('name')
+    surname = request.form.get('surname')
+    date = request.form.get('date')
+    login = request.form.get('login')
+    password = request.form.get('password')
+    password2 = request.form.get('password2')
+
+    if request.method == 'POST':
+        if not (login or password or password2):
+            flash('Пожалуйста, заполните все поля!')
+        elif password != password2:
+            flash('Пароли не равны!')
+        else:
+            hash_pwd = generate_password_hash(password)
+            new_user = User(name=name, surname=surname, login=login, password=hash_pwd, date=date)
+            db.session.add(new_user)
+            db.session.commit()
+
+            return redirect(url_for('login_page'))
+    return render_template('register.html')
+# @app.route('/admin')
+# def admin():
+#     return render_template('admin')
+
+@app.route('/schedule', methods=['GET', 'POST'])
+@login_required
+def schedule():
+    schedules = True
+    from_city = request.form.get('from_city')
+    to_city = request.form.get('to_city')
+    print(request.method)
+    if request.method == 'POST':
+
+
+        schedules = Tickets.query.filter_by(from_city=from_city,to_city=to_city).all()
+        if schedules:
+            return render_template('poisk.html', schedules=schedules)
+        else:
+            schedules = False
+
+    return render_template('schedule.html', schedules=schedules)
+
+@app.route('/schedule/<int:id>')
+@login_required
+def schedule_add(id):
+    user_id = current_user.get_id()
+
+    data = Tickets.query.get_or_404(id)
+    date = data.date
+    from_city = data.from_city
+    to_city = data.to_city
+    price = data.price
+    new_hisoriTickets = hisoriTickets(date=date, from_city=from_city, to_city=to_city, price=price, login_id=user_id)
+    db.session.add(new_hisoriTickets)
+    db.session.commit()
+    return redirect(url_for('history'))
+
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('hello_world'))
+
+
+@app.after_request
+def redirect_to_signin(response):
+    if response.status_code == 401:
+        return redirect(url_for('login_page') + '?next=' + request.url)
+
+    return response
