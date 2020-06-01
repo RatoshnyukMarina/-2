@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}
+    Расписание
+{% endblock %}
+{% if current_user.is_authenticated %}
+    {% block header %}
+        <header>
+            <nav class="navbar navbar-expand navbar-dark bg-dark">
+                <a class="navbar-brand" href="{{ url_for('hello_world') }}">MARINA</a>
+
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ url_for('hello_world') }}">Главная <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('schedule') }}">Расписание</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('history') }}">История</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Выход</a>
+                        </li>
+
+                    </ul>
+
+                    <form class="form-inline my-2 my-md-0">
+                        <input class="form-control" type="text" placeholder="Search">
+                    </form>
+            </nav>
+        </header>{% endblock %}
+{% endif %}
+{% block body %}
+
+    <div class="container">
+
+        <form class="featurette-heading col-md-7" method="POST">
+            {% if not schedules %}
+                <div class="input-group">
+                    <h4>нет билетов</h4>
+                </div>
+            {% endif %}
+            <div class="form-group input-group">
+                <input type="text" id="from_city" name="from_city" class="form-control" placeholder="Город Вылета"
+                       required="" autofocus="">
+
+            </div>
+
+            <div class="form-group input-group">
+                <input type="text" id="to_city" name="to_city" class="form-control" placeholder="Город Прилета"
+                       required="">
+
+            </div>
+
+
+            <button class="btn  btn-primary btn-block" type="submit">Поиск</button>
+
+        </form>
+    </div>
+
+{% endblock %}
