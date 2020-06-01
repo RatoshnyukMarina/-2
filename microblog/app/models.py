@@ -52,3 +52,39 @@ class Post(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+
+
+
+from datetime import datetime
+from flask_login import UserMixin
+from sweater import db, manager
+
+
+class Tickets(db.Model):
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    from_city = db.Column(db.String(300), nullable=False)
+    to_city = db.Column(db.String(300), nullable=False)
+    price = db.Column(db.Integer(), nullable=False)
+    date = db.Column(db.Date)
+class hisoriTickets(db.Model):
+    id = db.Column(db.Integer(), primary_key=True,autoincrement=True)
+    login_id = db.Column(db.Integer())
+    from_city = db.Column(db.String(300), nullable=False)
+    to_city = db.Column(db.String(300), nullable=False)
+    price = db.Column(db.Integer(), nullable=False)
+    date = db.Column(db.Date)
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(128), nullable=False)
+    surname = db.Column(db.String(128), nullable=False)
+    login = db.Column(db.String(128), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
+    date = db.Column(db.String(200),nullable=False)
+
+
+
+@manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
