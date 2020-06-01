@@ -35,3 +35,133 @@
         <p>{{ form.submit() }}</p>
     </form>
 {% endblock %}
+
+
+
+
+
+{% extends 'base.html' %}
+{% block title %}
+    Главная страница
+{% endblock %}
+{% block body %}
+    <style>
+        .form-width {
+            max-width: 25rem;
+        }
+
+        .has-float-label {
+            position: relative;
+        }
+
+        .has-float-label label {
+            position: absolute;
+            left: 0;
+            top: 0;
+            cursor: text;
+            font-size: 75%;
+            opacity: 1;
+            -webkit-transition: all .2s;
+            transition: all .2s;
+            top: -.5em;
+            left: 0.75rem;
+            z-index: 3;
+            line-height: 1;
+            padding: 0 1px;
+        }
+
+        .has-float-label label::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            background: white;
+            height: 2px;
+            top: 50%;
+            left: -.2em;
+            right: -.2em;
+            z-index: -1;
+        }
+
+        .has-float-label .form-control::-webkit-input-placeholder {
+            opacity: 1;
+            -webkit-transition: all .2s;
+            transition: all .2s;
+        }
+
+        .has-float-label .form-control:placeholder-shown:not(:focus)::-webkit-input-placeholder {
+            opacity: 0;
+        }
+
+        .has-float-label .form-control:placeholder-shown:not(:focus) + label {
+            font-size: 150%;
+            opacity: .5;
+            top: .3em;
+        }
+
+        .input-group .has-float-label {
+            display: table-cell;
+        }
+
+        .input-group .has-float-label .form-control {
+            border-radius: 0.25rem;
+        }
+
+        .input-group .has-float-label:not(:last-child) .form-control {
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .input-group .has-float-label:not(:first-child) .form-control {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            margin-left: -1px;
+        }
+    </style>
+
+    <div class="p-x-1 p-y-3">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <form class=" card-block m-x-auto  form-width" method="POST">
+            <legend class="m-b-1 text-xs-center">Регистрация</legend>
+            <div class="form-group input-group">
+ <span class="">
+ <input class="form-control" id="first" type="text" name="name" placeholder="Имя"/>
+{# <label for="first">Имя</label> has-float-labe#}
+ </span>
+            </div>
+            <div class="form-group input-group">
+ <span class="">
+ <input class="form-control" id="last" type="text" name="surname" placeholder="Фамилия"/>
+{# <label for="last">Фамилия</label>#}
+ </span>
+            </div>
+            <div class="form-group ">
+                <input type="text" class="form-control" id="date" name="date" placeholder="Дата"/>
+                {# <label for="date">Дата рождения</label>#}
+            </div>
+            <div class="form-group input-group">
+                {# <span class="input-group-addon">@</span>#}
+                <span class="">
+ <input class="form-control" id="email" type="email" name="login" placeholder="name@example.com"/>
+{# <label for="email">E-mail</label>#}
+ </span>
+            </div>
+            <div class="form-group ">
+                <input class="form-control" id="password" type="password" name="password" placeholder="••••••••"/>
+                {# <label for="password">Пароль</label>#}
+            </div>
+            <div class="form-group ">
+                <input class="form-control" id="password2" type="password" name="password2" placeholder="••••••••"/>
+                {# <label for="password2">Пароль повторно</label>#}
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
