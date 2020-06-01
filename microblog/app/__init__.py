@@ -62,3 +62,51 @@ if not app.debug:
 
 
 from app import routes, models, errors
+
+
+
+from flask import Flask, redirect, url_for
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from flask_login import LoginManager, current_user
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.secret_key = 'some secret salt'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tickets.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+manager = LoginManager(app)
+
+from sweater import models, routes
+
+admin = Admin(app)
+
+
+class MyModelView(ModelView):
+    def is_accessible(self):
+        user_id = current_user.get_id()
+        if user_id == '1':
+            return True
+        else:
+            return False
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login_page'))
+
+
+class SetView(MyModelView):
+    form_columns = ['from_city', 'to_city', 'price', 'date']
+     def is_accessible(self):
+         user_id = current_user.get_id()
+    
+         if user_id == '1':
+             return True
+         else:
+             return False
+
+
+admin.add_view(SetView(models.Tickets, db.session))
+admin.add_view(MyModelView(models.User, db.session))
+
+db.create_all()
