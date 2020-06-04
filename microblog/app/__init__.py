@@ -67,7 +67,6 @@ from app import routes, models, errors
 
 from flask import Flask, redirect, url_for
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 
